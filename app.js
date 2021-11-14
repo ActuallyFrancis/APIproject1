@@ -1,25 +1,25 @@
-const api = {
-    key: "0eb36101fd90d52de1c9c4ab0f26411a",
-    baseurl: "https://api.openweathermap.org/data/2.5"
-}
+var input = document.querySelector('.input_text');
+var main = document.querySelector('#name');
+var temp = document.querySelector('.temp');
+var desc = document.querySelector('.desc');
+var clouds = document.querySelector('.clouds');
+var button= document.querySelector('.submit');
 
-const searchbox = document.querySelector('.search-box');
-searchbox.addEventListener('keypress', setQuery);
 
-function setQuery(evt){
-    if (evt.keyCode == 13) { //13 is return key or "enter"
-        getResults(searchbox.value);
-        console.log(searchbox.value)
-    }
-}
+button.addEventListener('click', function(name){
+fetch('https://api.openweathermap.org/data/2.5/weather?q='+input.value+'&units=metric&appid=f32763d077dee06e885277079b1bf851')
+.then(response => response.json())
+.then(data => {
+  var tempValue = data['main']['temp'];
+  var nameValue = data['name'];
+  var descValue = data['weather'][0]['description'];
 
-function getResults (query) {
-    fetch(`${api.baseurl}weather?q=#${query}&units=metric&APPID=${api.key}`)
-    .then(weather => {
-        return weather.json();
-    }).then(displayResults);
-}
+  main.innerHTML = nameValue;
+  desc.innerHTML = "☁️Clouds - "+descValue;
+  temp.innerHTML = "🌡️Temperature °C - "+tempValue;
+  input.value ="";
 
-function displayResults(weather){
-    console.log(weather);
-}
+})
+//error invalid palace
+.catch(err => alert("Invalid Place"));
+})
